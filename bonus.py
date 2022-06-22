@@ -1,3 +1,5 @@
+import random
+
 """
 Implement a 10x10 grid that contains a starting point on (0,0),
 the delivery point on (9,9) and the following obstacles on
@@ -11,16 +13,42 @@ width = 10
 # Generate grid with no obstacles
 grid = []
 for i in range(0, height):
-        row = []
+        line = []
         for j in range(0, width):
-            row.append(' ')
-        grid.append(row)
+            line.append(' ')
+        grid.append(line)
 
 # Adding obstacles
 grid[7][9] = 'X'
 grid[7][8] = 'X'
 grid[7][6] = 'X'
 grid[8][6] = 'X'
+
+"""
+Add an additional 20 randomly placed obstacles and print their location
+using the format [(x1,y1), (x2,y2),...]
+"""
+
+# Set number of additional randomly placed obstacles
+obstacles = 20
+
+# Initialising list where the location of obstacles will be stored
+obstacleLocation = []
+
+for i in range(0, obstacles):
+    placed = False
+    while placed == False:
+        # Pick a random coordinate
+        x = random.randrange(0, width)
+        y = random.randrange(0, height)
+        # Check that there are no obtacles in that coordinate already
+        if grid[y][x] == ' ':
+            grid[y][x] = 'X'
+            obstacleLocation.append((x,y))
+            placed = True
+
+# Print obstacle locations on screen
+print("Obstacle coordinates: ", obstacleLocation)
 
 # Setting starting point
 startX = 0
@@ -39,6 +67,7 @@ reaching the delivery point.
 Your solution should print the path in the format of
 [(x1,y1),(x2,y2)...] and also the number of steps.
 """
+path = []
 
 # Counters to keep track of layers in the Breadth First Search Algorithm
 nodesInNextLayer = 0
@@ -111,7 +140,6 @@ while len(qX) > 0:
 
 if delivered == True:
     # Reconstruct the path
-    path = []
     at = (deliveryX, deliveryY)
     while at != None:
         path.append(at)
@@ -122,8 +150,22 @@ if delivered == True:
     print("Number of steps: ", len(path))
     # Print path in the CLI
     print("Path: ", path)
+
+    """
+    In the event that your vehicle is unable to reach its destinantion,
+    your algorithm should print "Unable to reach delivery point" and identify
+    which obstacles need to be removed in order for the vehicle to reach its
+    destination.
+
+    Your algorith should suggest the least amount of obstacles using the format
+    [(x1,y1),(x2,y2)...] in order for your vehicle to reach its destination.
+    """
+
 else:
     print("Unable to reach delivery point")
+
+for i in path:
+    grid[i[1]][i[0]] = "#"
 
 # Print grid in the CLI
 for row in grid:

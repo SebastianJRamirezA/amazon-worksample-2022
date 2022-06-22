@@ -67,6 +67,7 @@ reaching the delivery point.
 Your solution should print the path in the format of
 [(x1,y1),(x2,y2)...] and also the number of steps.
 """
+path = []
 
 # Counters to keep track of layers in the Breadth First Search Algorithm
 nodesInNextLayer = 0
@@ -139,7 +140,6 @@ while len(qX) > 0:
 
 if delivered == True:
     # Reconstruct the path
-    path = []
     at = (deliveryX, deliveryY)
     while at != None:
         path.append(at)
@@ -151,8 +151,10 @@ if delivered == True:
     # Print path in the CLI
     print("Path: ", path)
 else:
-    print("Path not found")
+    print("Unable to reach delivery point")
 
+for i in path:
+    grid[i[1]][i[0]] = "#"
 
 # Print grid in the CLI
 for row in grid:
