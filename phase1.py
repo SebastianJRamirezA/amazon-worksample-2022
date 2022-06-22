@@ -40,9 +40,6 @@ Your solution should print the path in the format of
 [(x1,y1),(x2,y2)...] and also the number of steps.
 """
 
-# Counter with the number of steps
-moveCount = 0
-
 # Counters to keep track of layers in the Breadth First Search Algorithm
 nodesInNextLayer = 0
 nodesLeftInLayer = 1
@@ -111,19 +108,20 @@ while len(qX) > 0:
     if nodesLeftInLayer == 0:
         nodesLeftInLayer = nodesInNextLayer
         nodesInNextLayer = 0
-        moveCount += 1
-
-# Reconstruct the path
-path = []
-at = (deliveryX, deliveryY)
-while at != None:
-    path.append(at)
-    at = previous[at[1]][at[0]]
-path.reverse()
-print("Path: ", path)
 
 if delivered == True:
-    print("Number of steps: ", moveCount)
+    # Reconstruct the path
+    path = []
+    at = (deliveryX, deliveryY)
+    while at != None:
+        path.append(at)
+        at = previous[at[1]][at[0]]
+    path.reverse()
+
+    # Print number of steps in the CLI
+    print("Number of steps: ", len(path))
+    # Print path in the CLI
+    print("Path: ", path)
 else:
     print("Path not found")
 
