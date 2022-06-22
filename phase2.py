@@ -85,6 +85,13 @@ for i in range(0, height):
             line.append(False)
         visited.append(line)
 
+previous = []
+for i in range(0, height):
+        line = []
+        for j in range(0, width):
+            line.append(None)
+        previous.append(line)
+
 qX = []
 qY = []
 qX.append(startX)
@@ -124,6 +131,16 @@ while len(qX) > 0:
         nodesLeftInLayer = nodesInNextLayer
         nodesInNextLayer = 0
         moveCount += 1
+
+# Reconstruct the path
+path = []
+at = (deliveryX, deliveryY)
+while at != None:
+    path.append(at)
+    at = previous[at[1]][at[0]]
+path.reverse()
+print("Path: ", path)
+
 
 if delivered == True:
     print(moveCount)

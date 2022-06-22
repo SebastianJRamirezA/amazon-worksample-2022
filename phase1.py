@@ -11,10 +11,10 @@ width = 10
 # Generate grid with no obstacles
 grid = []
 for i in range(0, height):
-        line = []
+        row = []
         for j in range(0, width):
-            line.append(' ')
-        grid.append(line)
+            row.append(' ')
+        grid.append(row)
 
 # Adding obstacles
 grid[7][9] = 'X'
@@ -40,29 +40,44 @@ Your solution should print the path in the format of
 [(x1,y1),(x2,y2)...] and also the number of steps.
 """
 
-# Moves counters
+# Counter with the number of steps
 moveCount = 0
+
+# Counters to keep track of layers in the Breadth First Search Algorithm
 nodesInNextLayer = 0
 nodesLeftInLayer = 1
 
-# Direction vectors 
+# Direction vectors (Vertical, horizontal and diagonal)
 directionX = [-1, 1, 0, 0, 1, -1, -1, 1]
 directionY = [0, 0, -1, 1, 1, -1, -1, 1]
 
-# Visited matrix
+# Generate matrix to check whether a cell has been visited or not
 visited = []
 for i in range(0, height):
-        line = []
+        row = []
         for j in range(0, width):
-            line.append(False)
-        visited.append(line)
+            row.append(False)
+        visited.append(row)
 
+# Generate matrix that stores the previous cell so we can
+# reconstruct the path once one its found
+previous = []
+for i in range(0, height):
+        row = []
+        for j in range(0, width):
+            row.append(None)
+        previous.append(row)
+
+#Queues that stores the x and y coordinates of the cells
+# we will visit next
 qX = []
 qY = []
+
+# Visit starting point
 qX.append(startX)
 qY.append(startY)
-
 visited[startY][startX] = True
+
 delivered = False
 
 while len(qX) > 0:
@@ -88,6 +103,7 @@ while len(qX) > 0:
             continue
         qX.append(x)
         qY.append(y)
+        previous[y][x] = (currentX, currentY)
         visited[y][x] = True
         nodesInNextLayer += 1
 
@@ -96,6 +112,15 @@ while len(qX) > 0:
         nodesLeftInLayer = nodesInNextLayer
         nodesInNextLayer = 0
         moveCount += 1
+
+# Reconstruct the path
+path = []
+at = (deliveryX, deliveryY)
+while at != None:
+    path.append(at)
+    at = previous[at[1]][at[0]]
+path.reverse()
+print("Path: ", path)
 
 if delivered == True:
     print("Number of steps: ", moveCount)
